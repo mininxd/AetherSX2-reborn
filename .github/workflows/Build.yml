@@ -27,8 +27,8 @@ jobs:
 
       - name: install Dependencies
         run : |
-         curl https://dl.google.com/android/repository/android-ndk-r23c-linux.zip -O r23c.zip
-         sudo apt install build-essential gcc g++ cmake make ninja-build git wget openssl zipalign apksigner zip unzip openjdk-19-jre-headless -y
+         sudo apt install curl build-essential gcc g++ cmake make ninja-build git wget openssl zipalign apksigner zip unzip openjdk-19-jre-headless -y
+         curl -o r23c.zip https://dl.google.com/android/repository/android-ndk-r23c-linux.zip
          unzip r23c.zip
 
       - name: clone repo
