@@ -39,10 +39,17 @@ jobs:
 
       - name: check dir
         run : | 
+         ls -a
          tree ./
-         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/ndk_folder/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=android-26 -DANDROID_ABI=arm64-v8a ..
+         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$HOME/android-ndk-r23c/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=android-26 -DANDROID_ABI=arm64-v8a ..
         
+      - name: build libemucore
+        run : make -j8
 
+      - name: sign APK
+        run : |
+         cd $HOME/build-android/apk
+         cp /apk_path/purplesx2.apk .
 
 
         
