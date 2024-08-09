@@ -46,11 +46,22 @@ jobs:
       - name: build libemucore
         run : make -j8
 
-      - name: sign APK
+      - name: get APK Shell
         run : |
          cd $HOME/build-android/apk
-         cp /apk_path/purplesx2.apk .
+         curl -o purplesx2.apk https://github.com/mininxd/AetherSX2-reborn/releases/download/shell/shell
+         mkdir -p lib/arm64-v8a && cp ../pcsx2/libemucore.so lib/arm64-v8a
+         ls -a 
+         tree ./
 
+      - name: zipalign
+        run : |
+         zip -0 purplesx2.apk lib/arm64-v8a/libemucore.so
+         zipalign -p 4 purplesx2.apk purplesx2-aligned.apk
+         keytool -genkey -v -keystore keyname.keystore -alias keyname -keyalg RSA -keysize 2048 -validity 10000
+         apksigner sign --ks keyname.keystore --ks-pass "pass:pass_keystore" --ks-key-alias keyname --out purplesx2-signed.apk --verbose purplesx2-aligned.apk
+
+         
 
         
 
