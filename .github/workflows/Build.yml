@@ -60,8 +60,34 @@ jobs:
          zipalign -p 4 purplesx2.apk purplesx2-aligned.apk
          keytool -genkey -v -keystore keyname.keystore -alias keyname -keyalg RSA -keysize 2048 -validity 10000
          apksigner sign --ks keyname.keystore --ks-pass "pass:pass_keystore" --ks-key-alias keyname --out purplesx2-signed.apk --verbose purplesx2-aligned.apk
+         tree ./
+      
+      - name: Upload to Artifact
+        uses: actions/upload-artifact@v3
+        with:
+         name: purplesx2-signed.apk
+         path: ./
 
-         
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}${{ github.workflow_sha }}
+          release_name: test
+    
+      - name: Upload purplesx2.apk
+        uses: actions/upload-release-asset@v1
+        env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+         upload_url: ${{ steps.create_release.outputs.upload_url }}
+         asset_path: ./purplesx2-signed.apk
+         asset_name: purplesx2-signed.apk
+         asset_content_type: application/octet-stream
+       
+      
 
         
 
