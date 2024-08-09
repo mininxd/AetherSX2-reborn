@@ -17,14 +17,37 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Check Directory
+        run : |
+         ls -a
+         tree ./
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: install Dependencies
+        run : |
+         curl https://dl.google.com/android/repository/android-ndk-r23c-linux.zip -O r23c.zip
+         sudo apt install build-essential gcc g++ cmake make ninja-build git wget openssl zipalign apksigner zip unzip openjdk-19-jre-headless -y
+         unzip r23c.zip
+
+      - name: clone repo
+        run : git clone https://github.com/MrPurple666/AetherSX2 -b main
+
+      - name: create directory
+        run : mkdir build-android && cd build-android && mkdir apk
+
+      - name: check dir
+        run : | 
+         tree ./
+         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/ndk_folder/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=android-26 -DANDROID_ABI=arm64-v8a ..
+        
+
+
+
+        
+
+      
+
+
+      
